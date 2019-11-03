@@ -25,6 +25,12 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.leonardomoreira.lkt",
+      "permissions": [
+        "android.permission.INTERNET"
+      ]
     }
   }
 }

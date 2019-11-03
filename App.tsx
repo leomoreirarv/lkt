@@ -1,23 +1,13 @@
-import React, { Component } from 'react';
-import { ThemeProvider, Header } from 'react-native-elements';
-import CardList from './src/components/CarList';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import HomeScreen from './src/components/HomeScreen';
+import DetailsScreen from './src/components/DetailsScreen';
 
-export default class App extends Component {
-  data: any;
-  isLoaded: Boolean = false;
+const MainNavigator = createStackNavigator({
+  Home: { screen: HomeScreen },
+  Details: { screen: DetailsScreen }
+});
 
-  constructor(props) {
-    super(props);
-  }
+const App = createAppContainer(MainNavigator);
 
-  render() {
-    return (
-      <ThemeProvider>
-        <Header
-          centerComponent={{ text: 'Magic: The Gathering', style: { color: '#fff' } }}
-        />
-        <CardList/>
-      </ThemeProvider>
-    );
-  }
-}
+export default App;
