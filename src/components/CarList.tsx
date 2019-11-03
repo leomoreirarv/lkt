@@ -8,23 +8,34 @@ import CardItem from "./CarItem";
 
 const initialState = {
   cards: [],
+  page: 0,
   loaded: false
 }
 
-const mapDispatchToProps = (dispatch, cards) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    updateCards: cards => dispatch(updateCards(cards))
+    updateCards: cards => dispatch(updateCards(cards)),
+    pageIncrement: () => dispatch(pageIncrement())
   }
 }
 
 const updateCards = cards => ({ type: actionTypes.UPDATE_CARDS, payload: cards });
+const pageIncrement = () => ({ type: actionTypes.PAGE_INCREMENT });
 
 const rootReducer = (state = initialState, action) => {
-  if (action.type === actionTypes.UPDATE_CARDS) {
-    return Object.assign({}, state, {
-      cards: state.cards.concat(action.payload),
-      loaded: true
-    });
+  switch (action.type) {
+    case actionTypes.UPDATE_CARDS:
+      return Object.assign({}, state, {
+        cards: state.cards.concat(action.payload),
+        page: state.page,
+        loaded: true
+      });
+    case actionTypes.PAGE_INCREMENT:
+      return Object.assign({}, state, {
+        cards: state.cards,
+        page: state.page + 1,
+        loaded: false
+      });
   }
 }
 
@@ -41,30 +52,39 @@ export default class CardList extends Component<any> {
     super(props)
     this.state = {
       cars: [],
+      page: 0,
       loaded: false
     }
   }
 
   componentDidMount() {
-    loadCards().then(data => {
+    this.updateCarsList();
+  }
+
+  updateCarsList() {
+    loadCards(this.state.page).then(data => {
       store.dispatch({ type: actionTypes.UPDATE_CARDS, payload: data.cards });
       this.setState(store.getState())
-      console.log(this.state);
     });
+  }
+
+  incrementPageList() {
+    store.dispatch({ type: actionTypes.PAGE_INCREMENT });
+    this.setState(store.getState());
+    this.updateCarsList();
   }
 
   render() {
     return (
       <Provider store={store} >
-        {!this.state.loaded ? (<ProgressBar indeterminate={true} color={Colors.red800} />) : (
-          <FlatList
-            data={this.state.cards}
-            extraData={this.state.cards}
-            renderItem={(item) => <CardItem data={item} />}
-          >
-          </FlatList>
-        )
-        }
+        {!this.state.loaded ? (<ProgressBar indeterminate={true} color={Colors.red800} />) : null}
+        <FlatList
+          data={this.state.cards}
+          extraData={this.state.cards}
+          renderItem={(item) => <CardItem data={item} />}
+          onEndReached={() => this.incrementPageList()}
+        >
+        </FlatList>
       </Provider>
     );
   }
@@ -72,8 +92,8 @@ export default class CardList extends Component<any> {
 
 connect(mapStateToProps, mapDispatchToProps)(CardList);
 
-export function loadCards() {
-  return fetch("https://api.magicthegathering.io/v1/cards?page=0&pageSize=30&contains=imageUrl")
+export function loadCards(page = 0) {
+  return fetch(`https://api.magicthegathering.io/v1/cards?page=${page}&pageSize=30&contains=imageUrl`)
     .then(response => response.json())
     .then(json => {
       return json
