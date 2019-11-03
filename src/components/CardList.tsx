@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { actionTypes } from '../commons/actionTypes';
+import { actionTypes } from '../core/commons/actionTypes';
 import { Provider, connect } from 'react-redux';
 import { ProgressBar, Colors } from 'react-native-paper';
 import { createStore } from 'redux';

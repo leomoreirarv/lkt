@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { View } from "react-native";
 import { Icon } from "react-native-elements";
-import { colorsMap } from '../commons/colorsMap';
+import { colorsMap } from '../core/commons/colorsMap';
 
 export default class IconsList extends Component<any> {
 
