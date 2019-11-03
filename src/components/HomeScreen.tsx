@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'react-native-elements';
-import CardList from './CarList';
-import FilterMenu from './FilterMenu';
+import CardList from './CardList';
 
 export default class HomeScreen extends Component<any> {
   static navigationOptions = {

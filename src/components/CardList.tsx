@@ -3,11 +3,13 @@ import { actionTypes } from '../commons/actionTypes';
 import { Provider, connect } from 'react-redux';
 import { ProgressBar, Colors } from 'react-native-paper';
 import { createStore } from 'redux';
-import { FlatList, View, TextInput } from "react-native";
+import { FlatList } from "react-native";
 import CardItem from "./CardItem";
 import Toast from 'react-native-simple-toast';
-import { Button } from "react-native-elements";
 import SearchForm from "./SearchForm";
+import CardsService from "../core/network/CardsService";
+
+const service = new CardsService();
 
 const initialState = {
   cards: [],
@@ -67,12 +69,7 @@ const mapStateToProps = state => {
 const store = createStore(rootReducer);
 
 export function loadCards(page = 0, search = '') {
-  const url = `https://api.magicthegathering.io/v1/cards?page=${page}&pageSize=30&contains=imageUrl&name=${search}`;
-  return fetch(url)
-    .then(response => response.json())
-    .then(json => {
-      return json
-    });
+  return service.loadCards(page, search);
 }
 
 export default class CardList extends Component<any> {
