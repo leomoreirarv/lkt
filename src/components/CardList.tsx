@@ -131,19 +131,6 @@ export default class CardList extends Component<any> {
           onChangeTextCallback={this.onTextSearchChanges}
           isLoaded={loaded}
           onSearchTrigged={() => this.searchCard(search)} />
-        {/* <View>
-          <TextInput
-            value={search}
-            onChangeText={this.onTextSearchChanges}
-            style={{ padding: 8, margin: 8, borderBottomWidth: 1 }}
-            placeholder={loaded ? 'Search a card by name' : 'Please wait, loading cards...'}
-          />
-          <Button
-            onPress={() => this.searchCard(search)}
-            style={{ flex: 1 }}
-            title='Search'
-          />
-        </View> */}
         <FlatList
           data={cards}
           extraData={cards}
